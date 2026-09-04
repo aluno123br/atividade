@@ -1,0 +1,112 @@
+{
+  "info": {
+    "_postman_id": "f6bc04fb-b6b6-4ac4-8a27-devshowcase001",
+    "name": "DevShowcase API",
+    "description": "Coleção para demonstração da atividade de Programação Backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "baseUrl", "value": "http://127.0.0.1:8000"},
+    {"key": "profileId", "value": "1"},
+    {"key": "pythonId", "value": "1"},
+    {"key": "fastapiId", "value": "2"},
+    {"key": "projectId", "value": "1"}
+  ],
+  "item": [
+    {
+      "name": "01 Health Check",
+      "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/health"}
+    },
+    {
+      "name": "02 Criar Perfil",
+      "event": [{"listen": "test", "script": {"exec": ["if (pm.response.code === 201) {", "  pm.collectionVariables.set('profileId', pm.response.json().id);", "}"]}}],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"name\": \"Carlos Silva\",\n  \"bio\": \"Desenvolvedor backend\",\n  \"email\": \"carlos.dev@example.com\",\n  \"github_url\": \"https://github.com/carlos\",\n  \"linkedin_url\": \"https://www.linkedin.com/in/carlos\"\n}"},
+        "url": "{{baseUrl}}/api/profiles"
+      }
+    },
+    {
+      "name": "03 Buscar Perfil",
+      "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/profiles/{{profileId}}"}
+    },
+    {
+      "name": "04 Criar Tecnologia Python",
+      "event": [{"listen": "test", "script": {"exec": ["if (pm.response.code === 201) {", "  pm.collectionVariables.set('pythonId', pm.response.json().id);", "}"]}}],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"name\": \"Python\"\n}"},
+        "url": "{{baseUrl}}/api/technologies"
+      }
+    },
+    {
+      "name": "05 Criar Tecnologia FastAPI",
+      "event": [{"listen": "test", "script": {"exec": ["if (pm.response.code === 201) {", "  pm.collectionVariables.set('fastapiId', pm.response.json().id);", "}"]}}],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"name\": \"FastAPI\"\n}"},
+        "url": "{{baseUrl}}/api/technologies"
+      }
+    },
+    {
+      "name": "06 Listar Tecnologias",
+      "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/technologies"}
+    },
+    {
+      "name": "07 Criar Projeto",
+      "event": [{"listen": "test", "script": {"exec": ["if (pm.response.code === 201) {", "  pm.collectionVariables.set('projectId', pm.response.json().id);", "}"]}}],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"title\": \"DevShowcase\",\n  \"description\": \"API acadêmica para divulgação de projetos de desenvolvedores.\",\n  \"repository_url\": \"https://github.com/exemplo/devshowcase\",\n  \"profile_id\": {{profileId}},\n  \"technology_ids\": [{{pythonId}}, {{fastapiId}}]\n}"},
+        "url": "{{baseUrl}}/api/projects"
+      }
+    },
+    {
+      "name": "08 Listar Projetos",
+      "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/projects?page=0&size=10"}
+    },
+    {
+      "name": "09 Filtrar Projetos por Python",
+      "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/projects?technology=Python&page=0&size=10"}
+    },
+    {
+      "name": "10 Feedback Nota 5",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Projeto muito bem desenvolvido\"\n}"},
+        "url": "{{baseUrl}}/api/projects/{{projectId}}/feedbacks"
+      }
+    },
+    {
+      "name": "11 Feedback Nota 3",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"rating\": 3,\n  \"comment\": \"Bom projeto\"\n}"},
+        "url": "{{baseUrl}}/api/projects/{{projectId}}/feedbacks"
+      }
+    },
+    {
+      "name": "12 Dar Upvote",
+      "request": {"method": "PUT", "header": [], "url": "{{baseUrl}}/api/projects/{{projectId}}/upvote"}
+    },
+    {
+      "name": "13 Demonstrar Erro 404",
+      "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/profiles/999999"}
+    },
+    {
+      "name": "14 Demonstrar Erro 400",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"name\": \"A\",\n  \"email\": \"email-invalido\",\n  \"github_url\": \"url-invalida\"\n}"},
+        "url": "{{baseUrl}}/api/profiles"
+      }
+    }
+  ]
+}
